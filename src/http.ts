@@ -1,4 +1,4 @@
-import { Route, routing } from "./routes";
+import { RouteParams, routing } from "./routes";
 
 type JsonResponse = (obj: unknown) => Blob;
 
@@ -8,10 +8,10 @@ const jsonResponse: JsonResponse = (obj) =>
     type: "application/json",
   });
 
-const r1: Route = new Route({
+const r1: RouteParams = {
   selector: (req) => req.url.startsWith("http://0.0.0.0:3000/pippo/lists"), //todo regex
   handler: (req) => new Response(jsonResponse(["a", "b", "c"])),
-});
+};
 
 const myRoutes = routing([r1]);
 
