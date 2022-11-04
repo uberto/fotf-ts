@@ -20,10 +20,12 @@ const error404Handler: HttpHandler = function (req) {
   return new Response("Not Found Error!");
 }; //add 404 and req data
 
-export const routing =
-  (routes: Route[]): HttpHandler =>
+type Routing = (routes: Route[]) => HttpHandler;
+
+export const routing: Routing =
+  (routes) =>
   //returns the first route that matches the request
-  (request: Request) => {
+  (request) => {
     const r = routes.find(function (route) {
       return route.selector(request);
     });
