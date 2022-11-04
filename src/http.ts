@@ -15,11 +15,19 @@ const r1: RouteParams = {
 
 const myRoutes = routing([r1]);
 
+const logRequest = (request: Request) => {
+  console.log("REQUEST:");
+  console.log("url:", request.url);
+  console.log("Headers:");
+  request.headers.forEach((value, key) => {
+    console.log(`${key}: ${value}`);
+  });
+};
+
 export default {
   port: 3000,
   fetch(request: Request) {
-    console.log(request.url);
-
+    logRequest(request);
     return myRoutes(request);
   },
 };
