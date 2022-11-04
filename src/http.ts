@@ -9,7 +9,7 @@ const jsonResponse: JsonResponse = (obj) =>
   });
 
 const r1: Route = new Route({
-  selector: (req) => req.url.startsWith("/pippo/lists"), //todo regex
+  selector: (req) => req.url.startsWith("http://0.0.0.0:3000/pippo/lists"), //todo regex
   handler: (req) => new Response(jsonResponse(["a", "b", "c"])),
 });
 
@@ -18,7 +18,8 @@ const myRoutes = routing([r1]);
 export default {
   port: 3000,
   fetch(request: Request) {
-    console.log("in here", request);
+    console.log(request.url);
+
     return myRoutes(request);
   },
 };
