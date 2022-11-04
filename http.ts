@@ -1,45 +1,26 @@
 
 
+import {HttpHandler, routing, Route} from "./routes"
 
-type HttpHandler = (Request) => (Response)
 
-type RouteSelector = (Request) => boolean
+const r1: Route = new Route( {selector: (req: Request) => req.path.startsWith("/pippo/lists"),  //todo regex
+handler: (req: Request) => Response(["a","b","c"])})
 
-class Route {
-    selector: RouteSelector = function (req){return true}
-    handler: HttpHandler = function (req){return new Response("TODO!")}
-}
+//const r2: Route = new Route( (req: Request) => req.path.startsWith("/users"),  //todo regex
+//                             (req: Request) => Response(["pippo","pluto"]))
+//
+//const r3: Route = new Route( (req: Request) => req.path.startsWith("/pippo/lists/a"),  //todo regex
+//                             (req: Request) => Response(["buy milk","water plants"]))
 
-const error404Handler: HttpHandler = function (req) {return new Response("Not Found Error!")} //add 404 and req data
-
-function routing(routes: Route[]): HttpHandler {
-    //returns the first route that match the request
-    return function (request: Request) {
-        const r = routes.find(function (route) {
-            return route.selector(request)
-        })
-        if (r != undefined) {
-            return r.handler(request)
-        }
-        else {
-            return error404Handler(request)
-        }
-    }
-}
-//-------------
-
-const myRoutes: HttpHandler = routing([
-        new Route(),
-        new Route(),
-        new Route()
-    ])
+const myRoutes: HttpHandler = routing([r1]) //,r2,r3
 
 
 export default {
     port: 3000,
     fetch(request: Request) {
-//         return new Response("Welcome to Bun!")
-        return myRoutes(request)
+        console.log(request)
+        return new Response("Welcome to Bun!")
+
+//        return myRoutes(request)
     }
 }
-
