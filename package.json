@@ -1,0 +1,12 @@
+{
+  "name": "fotf-ts",
+  "version": "1.0.0",
+  "repository": "ssh://git@github.com/uberto/fotf-ts.git",
+  "license": "MIT",
+  "dependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "scripts": {
+    "start": "nodemon --exec bun src/http.ts"
+  }
+}
