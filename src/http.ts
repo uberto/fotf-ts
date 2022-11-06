@@ -1,4 +1,4 @@
-import { RouteParams, routing } from "./routes";
+import { Req, RouteParams, routing } from "./routes";
 
 type JsonResponse = (obj: unknown) => Blob;
 
@@ -8,9 +8,14 @@ const jsonResponse: JsonResponse = (obj) =>
     type: "application/json",
   });
 
+// to test: curl http://localhost:3000/pippo/lists/1234
 const r1: RouteParams = {
-  selector: (req) => req.url.startsWith("http://0.0.0.0:3000/pippo/lists"), //todo regex
-  handler: (req) => new Response(jsonResponse(["a", "b", "c"])),
+  // do we really need the req here? maybe just a string | regex?
+  selector: (req) => "/pippo/lists/:id",
+  handler: (req) => {
+    console.log(req.params);
+    return new Response(jsonResponse(["a", "b", "c"]))
+  },
 };
 
 const myRoutes = routing([r1]);
