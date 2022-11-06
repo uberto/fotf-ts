@@ -3,10 +3,22 @@
   "version": "1.0.0",
   "repository": "ssh://git@github.com/uberto/fotf-ts.git",
   "license": "MIT",
-  "dependencies": {
-    "nodemon": "^2.0.20"
-  },
   "scripts": {
-    "start": "nodemon --exec bun src/http.ts"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "start": "bun --hot src/http.ts",
+    "lint": "eslint --ext .ts src"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "latest",
+    "@typescript-eslint/parser": "^5.30.6",
+    "bun-types": "^0.2.2",
+    "eslint": "7.32.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.7.1",
+    "typescript": "^4.8.4",
+    "vite": "^3.2.2",
+    "vitest": "^0.24.5"
   }
 }
