@@ -1,20 +1,23 @@
-// const myRoutes = (hub) => routing([
-//   "/:user/lists" GET { hub.allListsForUser(u)},
-//   "/:user/list/:id" GET { hub.getListForUser(u, id)}
-//   "/:user/list/:id" PUT { hub.updateListForUser(u, id, list)}
-//   "/:user/list" POST { hub.newListForUser(u, list)}
-// ])
-type Task = { description: string; completed?: boolean }
-type TaskList = { id: number; title: string; tasks: Task[] }
-interface TodolistHub {
+// hub is the object facade of the domain with an interface
+// hub will have an implementation with DB access and one with only mem for tests
+
+export type Task = { description: string; completed?: boolean }
+
+export type TaskList = { id: string; title: string; tasks: Task[] }
+
+export interface TodolistHub {
   getUserLists: (userName: string) => [TaskList]
-  getUserList: (userName: string, listId: number) => TaskList
+  getUserList: (userName: string, listId: string) => TaskList
+  //updateListForUser(user, id, list)}
+  //newListForUser(user, list)}
 }
-const todolistHub: TodolistHub = {
+
+//stub for tests
+export const todolistHubStub: TodolistHub = {
   getUserLists: (userName: string) => {
     return [
       {
-        id: 1,
+        id: "1",
         title: 'A task list',
         tasks: [
           { description: userName + "'s list 1" },
@@ -24,14 +27,14 @@ const todolistHub: TodolistHub = {
       }
     ]
   },
-  getUserList: (userName: string, listId: number) => {
+  getUserList: (userName: string, listId: string) => {
     return {
       id: listId,
-      title: 'A task list',
+      title: userName + "'s list " + listId ,
       tasks: [
-        { description: userName + "'s list 1" },
-        { description: userName + "'s list 2" },
-        { description: userName + "'s list 3" }
+        { description: "task 1"},
+        { description: "task 2"},
+        { description: "task 3"},
       ]
     }
   }

@@ -5,39 +5,26 @@ import {
   logRequest,
   RequestAndParams
 } from './routes'
+import {TodolistHub, todolistHubStub} from "./todolistHub";
 // import { sleepSync } from 'bun'
 
 //todo:
-//separate the library from the app files
+//implement write metodo (create and update list)
+//separate library files from app files
 //separate unittests
-//perf test
 
-const getLists = (req: RequestAndParams) =>
-  jsonResponse([
-    req.params.user + "'s list 1",
-    req.params.user + "'s list 2",
-    req.params.user + "'s list 3"
-  ])
+const getLists = (hub: TodolistHub) => (req: RequestAndParams) =>
+  jsonResponse(hub.getUserLists (req.params.user))
 
-const getListTasks = (req: RequestAndParams) =>
-  jsonResponse({
-    listId: req.params.id,
-    tasks: [
-      req.params.user + ' needs to buy this',
-      req.params.user + ' needs to buy that'
-    ]
-  })
+const getListTasks = (hub: TodolistHub) => (req: RequestAndParams) =>
+  jsonResponse(hub.getUserList (req.params.user, req.params.id))
 
-const myRoutes = routing([
-  // to test: curl http://localhost:3000/pippo/lists
-  routeParamsBuilder('/:user/lists', getLists),
-  // to test: curl http://localhost:3000/pippo/list/1234
-  routeParamsBuilder('/:user/list/:id', getListTasks)
+const myRoutes = (hub:TodolistHub) => routing([
+  routeParamsBuilder('/:user/lists', getLists(hub)),
+  routeParamsBuilder('/:user/list/:id', getListTasks(hub))
 ])
 
-// some kind of DSL like this:
-// hub is the object facade of the domain with an interface
-// hub will have an implementation with DB access and one with only mem for tests
+// define some kind of DSL like this:
 //
 // const myRoutes = (hub) => routing([
 //   "/:user/lists" GET { hub.allListsForUser(u)},
@@ -46,10 +33,13 @@ const myRoutes = routing([
 //   "/:user/list" POST { hub.newListForUser(u, list)}
 // ])
 
+
+// to test: curl http://localhost:3000/pippo/lists; curl http://localhost:3000/pippo/list/1234
+
 export default {
   port: 3000,
   fetch(request: Request) {
     logRequest(request)
-    return myRoutes(request)
+    return myRoutes(todolistHubStub)(request)
   }
 }
