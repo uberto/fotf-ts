@@ -24,5 +24,6 @@ bun runhot
 
 then go on port 3000 and try:
 ```
-/pippo/lists/
+/pippo/lists
+/pippo/list/1234
 ```
