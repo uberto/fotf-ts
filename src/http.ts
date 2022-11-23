@@ -17,7 +17,7 @@ const r1: RouteParams = {
   handler: (req) => {
     console.log(req.params)
     // sleepSync(1)
-    return new Response(jsonResponse(['a', 'b', 'c']))
+    return new Response(jsonResponse( {'listId': 123, 'tasks': ['do this', 'do that', 'buy the milk']}))
   }
 }
 
@@ -27,12 +27,14 @@ const myRoutes = routing([
 ])
 
 // some kind of DSL like this:
+// hub is the object facade of the domain with an interface
+// hub will have an implementation with DB access and one with only mem for tests
 //
-// const myRoutes = routing([
-//   "/:user/lists" GET { allListsForUser(u)},
-//   "/:user/list/:id" GET { getListForUser(u, id)}
-//   "/:user/list/:id" PUT { updateListForUser(u, id, list)}
-//   "/:user/list" POST { newListForUser(u, list)}
+// const myRoutes = (hub) => routing([
+//   "/:user/lists" GET { hub.allListsForUser(u)},
+//   "/:user/list/:id" GET { hub.getListForUser(u, id)}
+//   "/:user/list/:id" PUT { hub.updateListForUser(u, id, list)}
+//   "/:user/list" POST { hub.newListForUser(u, list)}
 // ])
 
 const logRequest = (request: Request) => {
