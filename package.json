@@ -6,7 +6,7 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
-    "start": "bun --hot src/http.ts",
+    "runhot": "bun --hot src/http.ts",
     "lint": "eslint --ext .ts src"
   },
   "devDependencies": {

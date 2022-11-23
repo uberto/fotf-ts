@@ -19,7 +19,7 @@ bun install
 then
 
 ```
-bun start
+bun runhot
 ```
 
 then go on port 3000 and try:
