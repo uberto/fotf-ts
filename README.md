@@ -12,11 +12,14 @@ The goal of this repo is to show:
 4) handle db access with Context (Reader monad)
 
 # instructions
+
+fist make sure to get all deps:
+
 ```
 bun install
 ```
 
-then
+to run the server in hot deploy mode for development:
 
 ```
 bun runhot
@@ -24,6 +27,6 @@ bun runhot
 
 then go on port 3000 and try:
 ```
-/pippo/lists
-/pippo/list/1234
+/userName/lists        => for the lists of a user
+/userName/list/1234    => to see a single list
 ```
