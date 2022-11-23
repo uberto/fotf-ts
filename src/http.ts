@@ -1,12 +1,10 @@
-import { RouteParams, routing, jsonResponse } from './routes'
+import {RouteParams, routing, jsonResponse, logRequest} from './routes'
 import {sleepSync} from "bun";
 
 //todo:
 //separate the library from the app files
 //rename http.ts to todolistApp
 //separate unittests
-//url for all list for users /:user/lists
-//url for list details /:user/list/:id
 //get params (:id,:user) from inside the
 //nicer DSL to create routes
 //perf test
