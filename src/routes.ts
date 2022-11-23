@@ -3,7 +3,7 @@ import { some } from './utils'
 export type RequestAndParams = Request & { params: { [key: string]: string } }
 export type HttpHandler = (req: Request) => Response
 export type UserHandler = (req: RequestAndParams) => Response
-export type RouteSelector = (req: Request) => string
+export type RouteSelector = (req: Request) => string  //TODO!!! this should return a boolean, this imply to use the regex to match the path and compare the method as well
 
 export type RouteParams = {
   selector: RouteSelector
