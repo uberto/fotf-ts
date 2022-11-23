@@ -51,8 +51,17 @@ const routeMatcher =
     return { ...req, params } as Req
   }
 
+export const routeParamsBuilder = (
+  routePartsString: string,
+  handler: (req: Req) => Response
+) => {
+  return {
+    selector: (_req) => routePartsString,
+    handler: handler
+  }
+}
 
-  //UnitTest
+//UnitTest
 if (import.meta.vitest) {
   const genReq = (endpoint: string) =>
     new Request(`http://localhost:3000${endpoint}`)
@@ -95,19 +104,17 @@ export const routing: Routing = (routes) => (request) => {
   }
 }
 
-
 // See here the accepted Response body types: https://developer.mozilla.org/en-US/docs/Web/API/Response/Response
 export const jsonResponse: JsonResponse = (obj) =>
-    new Blob([JSON.stringify(obj, null, 2)], {
-        type: 'application/json'
-    })
-
+  new Blob([JSON.stringify(obj, null, 2)], {
+    type: 'application/json'
+  })
 
 export const logRequest = (request: Request) => {
-    console.log('REQUEST:')
-    console.log('url:', request.url)
-    console.log('Headers:')
-    request.headers.forEach((value, key) => {
-        console.log(`${key}: ${value}`)
-    })
+  console.log('REQUEST:')
+  console.log('url:', request.url)
+  console.log('Headers:')
+  request.headers.forEach((value, key) => {
+    console.log(`${key}: ${value}`)
+  })
 }

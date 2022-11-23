@@ -1,5 +1,11 @@
-import {RouteParams, routing, jsonResponse, logRequest} from './routes'
-import {sleepSync} from "bun";
+import {
+  RouteParams,
+  routing,
+  routeParamsBuilder,
+  jsonResponse,
+  logRequest
+} from './routes'
+import { sleepSync } from 'bun'
 
 //todo:
 //separate the library from the app files
@@ -9,36 +15,31 @@ import {sleepSync} from "bun";
 //nicer DSL to create routes
 //perf test
 
-// to test: curl http://localhost:3000/pippo/lists
-const r0: RouteParams = {
-  selector: (_req) => '/:user/lists',
-  handler: (req) => {
-    return new Response(
-      jsonResponse([
-        req.params.user + "'s list 1",
-        req.params.user + "'s list 2",
-        req.params.user + "'s list 3"
-      ])
-    )
-  }
+const getLists = (req) => {
+  return new Response(
+    jsonResponse([
+      req.params.user + "'s list 1",
+      req.params.user + "'s list 2",
+      req.params.user + "'s list 3"
+    ])
+  )
 }
-// to test: curl http://localhost:3000/pippo/list/1234
+// to test: curl http://localhost:3000/pippo/lists
+const r0: RouteParams = routeParamsBuilder('/:user/lists', getLists)
 
-const r1: RouteParams = {
-  // do we really need the req here? maybe just a string | regex?
-  selector: (_req) => '/:user/list/:id',
-  handler: (req) => {
-  //    console.log(req.params)
-    // sleepSync(1)
-    return new Response(
-      jsonResponse({'listId': req.params.id, 'tasks':
-      [
+const getListTasks = (req) => {
+  return new Response(
+    jsonResponse({
+      listId: req.params.id,
+      tasks: [
         req.params.user + ' needs to buy this',
         req.params.user + ' needs to buy that'
-      ]})
-    )
-  }
+      ]
+    })
+  )
 }
+// to test: curl http://localhost:3000/pippo/list/1234
+const r1: RouteParams = routeParamsBuilder('/:user/list/:id', getListTasks)
 
 const myRoutes = routing([r0, r1])
 
@@ -52,7 +53,6 @@ const myRoutes = routing([r0, r1])
 //   "/:user/list/:id" PUT { hub.updateListForUser(u, id, list)}
 //   "/:user/list" POST { hub.newListForUser(u, list)}
 // ])
-
 
 export default {
   port: 3000,
