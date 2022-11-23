@@ -1,10 +1,12 @@
 import { RouteParams, routing, jsonResponse } from './routes'
+import {sleepSync} from "bun";
 
 //todo:
 //separate the library from the app files
 //rename http.ts to todolistApp
 //url for all list for users /:user/lists
 //url for list details /:user/list/:id
+//get params (:id,:user) from inside the
 //nicer DSL to create routes
 
 // to test: curl http://localhost:3000/pippo/lists
@@ -21,15 +23,19 @@ const r0: RouteParams = {
   }
 }
 // to test: curl http://localhost:3000/pippo/list/1234
+
 const r1: RouteParams = {
   // do we really need the req here? maybe just a string | regex?
   selector: (_req) => '/:user/list/:id',
   handler: (req) => {
+  //    console.log(req.params)
+    // sleepSync(1)
     return new Response(
-      jsonResponse([
+      jsonResponse({'listId': 123, 'tasks':
+      [
         req.params.user + ' needs to buy this',
         req.params.user + ' needs to buy that'
-      ])
+      ]})
     )
   }
 }
@@ -37,12 +43,14 @@ const r1: RouteParams = {
 const myRoutes = routing([r0, r1])
 
 // some kind of DSL like this:
+// hub is the object facade of the domain with an interface
+// hub will have an implementation with DB access and one with only mem for tests
 //
-// const myRoutes = routing([
-//   "/:user/lists" GET { allListsForUser(u)},
-//   "/:user/list/:id" GET { getListForUser(u, id)}
-//   "/:user/list/:id" PUT { updateListForUser(u, id, list)}
-//   "/:user/list" POST { newListForUser(u, list)}
+// const myRoutes = (hub) => routing([
+//   "/:user/lists" GET { hub.allListsForUser(u)},
+//   "/:user/list/:id" GET { hub.getListForUser(u, id)}
+//   "/:user/list/:id" PUT { hub.updateListForUser(u, id, list)}
+//   "/:user/list" POST { hub.newListForUser(u, list)}
 // ])
 
 const logRequest = (request: Request) => {
