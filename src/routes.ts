@@ -1,8 +1,8 @@
 import { some } from './utils'
 
-export type Req = Request & { params: { [key: string]: string } }
+export type RequestAndParams = Request & { params: { [key: string]: string } }
 export type HttpHandler = (req: Request) => Response
-export type UserHandler = (req: Req) => Response
+export type UserHandler = (req: RequestAndParams) => Response
 export type RouteSelector = (req: Request) => string
 
 export type RouteParams = {
@@ -20,7 +20,7 @@ type Routing = (routes: RouteParams[]) => HttpHandler
 
 const routeMatcher =
   (endpoint: string) =>
-  (req: Request): Req | undefined => {
+  (req: Request): RequestAndParams | undefined => {
     const url = new URL(req.url)
     const path = url.pathname
     const routeParts = endpoint.split('/')
@@ -29,7 +29,7 @@ const routeMatcher =
     if (endpoint.startsWith('^')) {
       const regex = new RegExp(endpoint)
       if (regex.test(path)) {
-        return { ...req, params: {} } as Req
+        return { ...req, params: {} } as RequestAndParams
       }
     }
 
@@ -48,15 +48,15 @@ const routeMatcher =
         return
       }
     }
-    return { ...req, params } as Req
+    return { ...req, params } as RequestAndParams
   }
 
 export const routeParamsBuilder = (
   routePartsString: string,
-  handler: (req: Req) => Response
+  handler: (req: RequestAndParams) => Response
 ) => {
   return {
-    selector: (_req) => routePartsString,
+    selector: (_req: Request) => routePartsString,
     handler: handler
   }
 }
@@ -75,28 +75,30 @@ if (import.meta.vitest) {
     expect(newReq).toBeDefined()
 
     const oneParamReq = genReq('/pippo/lists/1234')
-    const oneParam = routeMatcher('/pippo/lists/:id')(oneParamReq) as Req
+    const oneParam = routeMatcher('/pippo/lists/:id')(
+      oneParamReq
+    ) as RequestAndParams
 
     expect(oneParam.params).toEqual({ id: '1234' })
 
     const twoParamReq = genReq('/pippo/lists/1234/items/5678')
     const twoParams = routeMatcher('/pippo/lists/:id1/items/:id2')(
       twoParamReq
-    ) as Req
+    ) as RequestAndParams
 
     expect(twoParams.params).toEqual({ id1: '1234', id2: '5678' })
   })
 }
 
 export const routing: Routing = (routes) => (request) => {
-  const r = some<RouteParams, { handler: UserHandler; newRequest: Req }>(
-    ({ selector, handler }) => {
-      const endpoint = selector(request)
-      const newRequest = routeMatcher(endpoint)(request)
-      if (newRequest) return { handler, newRequest }
-    },
-    routes
-  )
+  const r = some<
+    RouteParams,
+    { handler: UserHandler; newRequest: RequestAndParams }
+  >(({ selector, handler }) => {
+    const endpoint = selector(request)
+    const newRequest = routeMatcher(endpoint)(request)
+    if (newRequest) return { handler, newRequest }
+  }, routes)
   if (r != undefined) {
     return r.handler(r.newRequest)
   } else {
