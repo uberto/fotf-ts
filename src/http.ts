@@ -1,12 +1,14 @@
 import { RouteParams, routing, jsonResponse } from './routes'
+import {sleepSync} from "bun";
 
 //todo:
 //separate the library from the app files
 //rename http.ts to todolistApp
 //url for all list for users /:user/lists
 //url for list details /:user/list/:id
+//get params (:id,:user) from inside the
 //nicer DSL to create routes
-
+//perf test
 
 // to test: curl http://localhost:3000/pippo/lists/1234
 const r1: RouteParams = {
@@ -14,6 +16,7 @@ const r1: RouteParams = {
   selector: (_req) => '/pippo/lists/:id',
   handler: (req) => {
     console.log(req.params)
+    // sleepSync(1)
     return new Response(jsonResponse(['a', 'b', 'c']))
   }
 }
