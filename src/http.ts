@@ -7,7 +7,6 @@ import { RouteParams, routing, jsonResponse } from './routes'
 //url for list details /:user/list/:id
 //nicer DSL to create routes
 
-
 // to test: curl http://localhost:3000/pippo/lists/1234
 const r1: RouteParams = {
   // do we really need the req here? maybe just a string | regex?
@@ -18,10 +17,7 @@ const r1: RouteParams = {
   }
 }
 
-
-const myRoutes = routing([
-    r1
-])
+const myRoutes = routing([r1])
 
 // some kind of DSL like this:
 //

@@ -93,9 +93,8 @@ export const routing: Routing = (routes) => (request) => {
   }
 }
 
-
 // See here the accepted Response body types: https://developer.mozilla.org/en-US/docs/Web/API/Response/Response
 export const jsonResponse: JsonResponse = (obj) =>
-    new Blob([JSON.stringify(obj, null, 2)], {
-        type: 'application/json'
-    })
+  new Blob([JSON.stringify(obj, null, 2)], {
+    type: 'application/json'
+  })
