@@ -3,9 +3,10 @@ import {
   routing,
   routeParamsBuilder,
   jsonResponse,
-  logRequest
+  logRequest,
+  RequestAndParams
 } from './routes'
-import { sleepSync } from 'bun'
+// import { sleepSync } from 'bun'
 
 //todo:
 //separate the library from the app files
@@ -15,33 +16,28 @@ import { sleepSync } from 'bun'
 //nicer DSL to create routes
 //perf test
 
-const getLists = (req) => {
-  return new Response(
-    jsonResponse([
-      req.params.user + "'s list 1",
-      req.params.user + "'s list 2",
-      req.params.user + "'s list 3"
-    ])
-  )
-}
-// to test: curl http://localhost:3000/pippo/lists
-const r0: RouteParams = routeParamsBuilder('/:user/lists', getLists)
+const getLists = (req: RequestAndParams) =>
+  jsonResponse([
+    req.params.user + "'s list 1",
+    req.params.user + "'s list 2",
+    req.params.user + "'s list 3"
+  ])
 
-const getListTasks = (req) => {
-  return new Response(
-    jsonResponse({
-      listId: req.params.id,
-      tasks: [
-        req.params.user + ' needs to buy this',
-        req.params.user + ' needs to buy that'
-      ]
-    })
-  )
-}
-// to test: curl http://localhost:3000/pippo/list/1234
-const r1: RouteParams = routeParamsBuilder('/:user/list/:id', getListTasks)
+const getListTasks = (req: RequestAndParams) =>
+  jsonResponse({
+    listId: req.params.id,
+    tasks: [
+      req.params.user + ' needs to buy this',
+      req.params.user + ' needs to buy that'
+    ]
+  })
 
-const myRoutes = routing([r0, r1])
+const myRoutes = routing([
+  // to test: curl http://localhost:3000/pippo/lists
+  routeParamsBuilder('/:user/lists', getLists),
+  // to test: curl http://localhost:3000/pippo/list/1234
+  routeParamsBuilder('/:user/list/:id', getListTasks)
+])
 
 // some kind of DSL like this:
 // hub is the object facade of the domain with an interface
