@@ -10,6 +10,8 @@ export type RouteParams = {
   handler: UserHandler
 }
 
+export type JsonResponse = (obj: unknown) => Blob
+
 const error404Handler: HttpHandler = function (_req) {
   return new Response('Not Found Error!')
 } //add 404 and req data
@@ -90,3 +92,10 @@ export const routing: Routing = (routes) => (request) => {
     return error404Handler(request)
   }
 }
+
+
+// See here the accepted Response body types: https://developer.mozilla.org/en-US/docs/Web/API/Response/Response
+export const jsonResponse: JsonResponse = (obj) =>
+    new Blob([JSON.stringify(obj, null, 2)], {
+        type: 'application/json'
+    })
