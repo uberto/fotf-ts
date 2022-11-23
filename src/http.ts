@@ -4,10 +4,12 @@ import {sleepSync} from "bun";
 //todo:
 //separate the library from the app files
 //rename http.ts to todolistApp
+//separate unittests
 //url for all list for users /:user/lists
 //url for list details /:user/list/:id
 //get params (:id,:user) from inside the
 //nicer DSL to create routes
+//perf test
 
 // to test: curl http://localhost:3000/pippo/lists
 const r0: RouteParams = {
@@ -31,7 +33,7 @@ const r1: RouteParams = {
   //    console.log(req.params)
     // sleepSync(1)
     return new Response(
-      jsonResponse({'listId': 123, 'tasks':
+      jsonResponse({'listId': req.params.id, 'tasks':
       [
         req.params.user + ' needs to buy this',
         req.params.user + ' needs to buy that'
@@ -53,14 +55,6 @@ const myRoutes = routing([r0, r1])
 //   "/:user/list" POST { hub.newListForUser(u, list)}
 // ])
 
-const logRequest = (request: Request) => {
-  console.log('REQUEST:')
-  console.log('url:', request.url)
-  console.log('Headers:')
-  request.headers.forEach((value, key) => {
-    console.log(`${key}: ${value}`)
-  })
-}
 
 export default {
   port: 3000,
