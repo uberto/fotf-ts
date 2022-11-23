@@ -1,5 +1,4 @@
 import {
-  RouteParams,
   routing,
   routeParamsBuilder,
   jsonResponse,
@@ -10,10 +9,7 @@ import {
 
 //todo:
 //separate the library from the app files
-//rename http.ts to todolistApp
 //separate unittests
-//get params (:id,:user) from inside the
-//nicer DSL to create routes
 //perf test
 
 const getLists = (req: RequestAndParams) =>
