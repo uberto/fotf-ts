@@ -8,3 +8,7 @@ export function some<T, R>(
     if (newValue) return newValue
   }
 }
+
+export function TODO(msg?: string): never {
+    throw new Error(msg ?? "Not yet implemented")
+}

@@ -51,15 +51,31 @@ const routeMatcher =
     return { ...req, params } as RequestAndParams
   }
 
-export const routeParamsBuilder = (
-  routePartsString: string,
-  handler: (req: RequestAndParams) => Response
+const routeParamsBuilder = (
+    method: string,
+    path: string,
+    handler: (req: RequestAndParams) => Response
 ) => {
   return {
-    selector: (_req: Request) => routePartsString,
+    selector: (_req: Request) => path,
     handler: handler
   }
 }
+
+export const GET = (
+    path: string,
+    handler: (req: RequestAndParams) => Response
+) =>   routeParamsBuilder('GET',path, handler)
+
+export const POST = (
+    path: string,
+    handler: (req: RequestAndParams) => Response
+) =>   routeParamsBuilder('POST',path, handler)
+
+export const PUT = (
+    path: string,
+    handler: (req: RequestAndParams) => Response
+) =>   routeParamsBuilder('PUT',path, handler)
 
 //UnitTest
 if (import.meta.vitest) {
@@ -116,6 +132,7 @@ export const jsonResponse: JsonResponse = (obj) =>
 
 export const logRequest = (request: Request) => {
   console.log('REQUEST:')
+  console.log('method:', request.method)
   console.log('url:', request.url)
   console.log('Headers:')
   request.headers.forEach((value, key) => {
